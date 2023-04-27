@@ -1,0 +1,20 @@
+body{
+    background-color: aliceblue;
+}
+
+#score{
+    font-size: 80px;
+    float: left;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+}
+
+#time{
+    font-size: 80px;
+    float: right;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+}
+
+#sketch_be_drawn{
+    font-size:  50px;
+    color: brown;
+}
