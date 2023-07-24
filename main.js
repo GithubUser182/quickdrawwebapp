@@ -15,25 +15,56 @@ answer_holder=""
 score=0
 
 function setup(){
-    canvas=createCanvas(1080,680)
+    canvas=createCanvas(1080,580)
     canvas.center()
     background("white")
+    canvas.mouseReleased(classifyCanvas)
+}
+
+function preload(){
+    classifier=ml5.imageClassifier('DoodleNet')
 }
 
 function draw(){
+    strokeWeight(13)
+    stroke(0)
+    if(mouseIsPressed){
+        line(pmouseX, pmouseY, mouseX, mouseY)
+    }
 check_sketch()
 if(drawn_sketch==sketch){
     answer_holder="set"
-    score++
+    score=score++
     document.getElementById("score").innerHTML="Score : "+score
 }
+
+
+}    
+
+function classifyCanvas(){
+    classifier.classify(canvas,gotResults)    
+}
+
+function gotResults(error,results){
+    if(error){
+        console.error(error);
+    }else{
+        console.log(results)
+        drawn_sketch=results[0].label
+        document.getElementById("your_sketch").innerHTML="Your Sketch : " + drawn_sketch
+
+        document.getElementById("confidence").innerHTML="Confidence : "+Math.round(results[0].confidence*100)+"%"
+        var synth=window.speechSynthesis
+        utterThis=new SpeechSynthesisUtterance("I see" + drawn_sketch)
+        synth.speak(utterThis)
+    }
 }
 
 function check_sketch(){
     timer_counter++
     document.getElementById("time").innerHTML="Timer : "+timer_counter
     console.log(timer_counter)
-    if(timer_counter>400){
+    if(timer_counter>2000){
         timer_counter=0
         timer_check="completed"
     }
@@ -53,4 +84,8 @@ function updateCanvas(){
     console.log(quick_draw_data_set[random_no])
 
     document.getElementById("sketch_be_drawn").innerHTML="Sketch to be Drawn : "+sketch
+}
+
+function clearPad(){
+    background("white")
 }
